@@ -4,11 +4,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
+    "nodemailer": "^6.3.0",
     "puppeteer": "^1.20.0"
   },
   "devDependencies": {},
   "scripts": {
-  	"start": "node index.js",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,7 +18,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "GNU",
   "bugs": {
     "url": "https://github.com/ojaswa1942/myntra-price-notify/issues"
   },
