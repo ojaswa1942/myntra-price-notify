@@ -6,7 +6,7 @@ Notifies when price of a product is less than a certain amount
 - Clone the repo using `git clone https://github.com/ojaswa1942/myntra-price-notify.git`
 - Install dependencies using `npm install` or `yarn install`
 - In `products.txt`, enter the product pages you want to monitor and the threshold price in the format `url, priceTarget`, one page per line.
-- Create/Update `/serviceAccouts.json` entering the required SMTP credentials.
+- Create/Update `/serviceAccouts.json` or `.env` entering the required SMTP credentials.
 
 ### Usage
 

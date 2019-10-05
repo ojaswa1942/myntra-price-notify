@@ -2,7 +2,10 @@ const fs = require('fs');
 const puppeteer = require('puppeteer');
 const readline = require('readline');
 const nodemailer = require('nodemailer');
-const serviceAccounts = require('./serviceAccounts.json');
+require('dotenv').config(); //When using .env
+
+const serviceAccounts = JSON.parse(process.env.SERVICE_ACCOUNTS); 
+//When using json value for SERVICE_ACCOUNTS in .env
 
 const parallelTabs = 5;
 
