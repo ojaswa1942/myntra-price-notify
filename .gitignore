@@ -1,3 +1,6 @@
+#custom
+serviceAccounts.json
+
 # Logs
 logs
 *.log
