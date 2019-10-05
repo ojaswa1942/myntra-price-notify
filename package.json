@@ -1,5 +1,25 @@
 {
+  "name": "myntra-price-notify",
+  "description": "Notifies when price of a product is less than a certain amount",
+  "version": "1.0.0",
+  "main": "index.js",
   "dependencies": {
     "puppeteer": "^1.20.0"
-  }
+  },
+  "devDependencies": {},
+  "scripts": {
+  	"start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ojaswa1942/myntra-price-notify.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ojaswa1942/myntra-price-notify/issues"
+  },
+  "homepage": "https://github.com/ojaswa1942/myntra-price-notify#readme"
 }

@@ -6,7 +6,7 @@ const parallelTabs = 5;
 
 const config = {
 	launchOptions: {
-		headless: false,
+		headless: true,
 		args: ['--no-sandbox']
 	},
 	viewport: {width: 1920, height: 1080}
@@ -24,7 +24,8 @@ async function processLineByLine(filee) {
 	for await (const line of rl) {
 		const prod = line.split(" ");
 		sites.push({
-			
+			url: prod[0],
+			price: Number(prod[1])
 		});
 	}
 	return sites;
@@ -39,7 +40,6 @@ const returnNewPage = async (browser, num) => {
 
 puppeteer.launch(config.launchOptions).then(async browser => {
 	const sites = await processLineByLine('products.txt');
-	console.log(sites);
   	const promises=[], total = sites.length;
   	var logs = [];
 	let count=0, dcount=0;
@@ -51,13 +51,24 @@ puppeteer.launch(config.launchOptions).then(async browser => {
 			promises.push(returnNewPage(browser, count++)
 			.then(async data => {
 				const {page, number} = data;
+				const {url, targetPrice} = sites[number];
+
 				await page.setDefaultNavigationTimeout('70000');
 				await page.setViewport(config.viewport);
 				await page.setUserAgent("notifyme-myntra");
-				
 
+				await page.goto(url);
+				await page.waitFor('.pdp-price strong');
 
-				await page.waitFor(10000);
+				const price = await page.evaluate(() => {
+					const el = document.querySelector('.pdp-price strong');
+					const price = el.innerText.replace("Rs. ", "");
+					return Number(price);
+				});
+
+				if(price < targetPrice){
+					await sendNotification(url, price);
+				}
 
 				await page.close();
 			})
@@ -65,7 +76,6 @@ puppeteer.launch(config.launchOptions).then(async browser => {
 		}
 		console.log('WAITING FOR',limit, 'PROCESSES TO END');
 		await Promise.all(promises)
-		console.log('------------------------');
   	}
 	console.log('---Closing Browser---');
   	await browser.close();
