@@ -1,6 +1,9 @@
 name: CRON
 
 on:
+  push:
+    paths:
+    - '.github'
   schedule:
   - cron: '0 */2 * * *'
 
