@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer');
 const { processLineByLine, returnNewPage } = require('./utils/utils');
-const { sendEmailNotification } = require('./utils/notifications');
+const { sendEmailNotification, sendWhatsappNotification } = require('./utils/notifications');
 
 //When using json value for SERVICE_ACCOUNTS in .env
 
@@ -40,9 +40,9 @@ puppeteer.launch(config.launchOptions).then(async browser => {
 
 				if(price <= targetPrice){
 					console.log(`Price for ${url} is ${price} (less than target price ${targetPrice})`);
-					console.log('Sending email & whatsapp notificaitons');
+					console.log('Sending email & whatsapp notifications');
 					await sendEmailNotification(url, price, productName);
-					
+					await sendWhatsappNotification(url, price, productName);
 				}
 
 				await page.close();

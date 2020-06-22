@@ -1,16 +1,15 @@
 const nodemailer = require('nodemailer');
-require('dotenv').config(); //When using .env
+const fetch = require('node-fetch');
 
+require('dotenv').config(); //When using .env
 const serviceAccounts = JSON.parse(process.env.SERVICE_ACCOUNTS); 
 
 const sendEmailNotification = async (url, price, productName) => {
     const transporter = nodemailer.createTransport(serviceAccounts.transport);
     transporter.verify(function(error, success) {
        if (error) {
-            console.log('miserable', error);
+            console.log('Error while establishing mail server connection', error);
        } else {
-            console.log('Server is ready to take our messages');
-
             let mailOptions = {
                 from: serviceAccounts.from,
                 to: serviceAccounts.to,
@@ -20,15 +19,45 @@ const sendEmailNotification = async (url, price, productName) => {
             };
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
-                    return console.log(error);
+                    return console.log('Error while sending email notification', error);
                 }
                 console.log('Message sent: %s', info.messageId);
-                // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
             });
        }
     });
 }
 
+const sendWhatsappNotification = async (url, price, productName) => {
+    const { whatsapp } = serviceAccounts;
+    try{
+        const token = await fetch(`${whatsapp.api}/login`, {
+            method: 'post',
+            headers: {'Content-type': 'application/json'},
+            body: JSON.stringify(whatsapp.login),
+        }).then(res => res.json()).then(res => res.token);
+
+        const response = await fetch(`${whatsapp.api}/send`, {
+            method: 'post',
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                group: whatsapp.group || "default",
+                body: `The Myntra product _${productName}_ is now available at price *${price}*.\nBuy now: ${url}`
+            }),
+        }).then(res => res.json()).then(res => res.message || res.error);
+
+        console.log(response);
+        return response;
+
+    }
+    catch(e){
+        console.log(`Error while sending whatsapp notification: ${e}`);
+    }
+}
+
 module.exports = {
-    sendEmailNotification
+    sendEmailNotification,
+    sendWhatsappNotification
 }
