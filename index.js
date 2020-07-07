@@ -38,6 +38,7 @@ puppeteer.launch(config.launchOptions).then(async browser => {
 					return [Number(price), name];
 				});
 
+				console.log(productName, price);
 				if(price <= targetPrice){
 					console.log(`Price for ${url} is ${price} (less than target price ${targetPrice})`);
 					console.log('Sending email & whatsapp notifications');
